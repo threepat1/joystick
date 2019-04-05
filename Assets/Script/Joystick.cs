@@ -8,7 +8,7 @@ public class Joystick : MonoBehaviour, IPointerDownHandler, IDragHandler, IPoint
 {
 
     [SerializeField]
-    private float handlerRange = 1;
+    private float handleRange = 1;
     [SerializeField]
     private float deadZone = 0;
     [SerializeField]
@@ -20,7 +20,7 @@ public class Joystick : MonoBehaviour, IPointerDownHandler, IDragHandler, IPoint
     [SerializeField]
     protected RectTransform background = null;
     [SerializeField]
-    private RectTransform handle = null;
+    protected RectTransform handle = null;
 
     #region References
     private RectTransform baseRect = null;
@@ -39,8 +39,8 @@ public class Joystick : MonoBehaviour, IPointerDownHandler, IDragHandler, IPoint
     public Vector2 Direction { get { return new Vector2(Horizontal, Vertical); } }
     public float HandleRange
     {
-        get { return handlerRange; }
-        set { handlerRange = Mathf.Abs(value); }
+        get { return handleRange; }
+        set { handleRange = Mathf.Abs(value); }
     }
     public float Deadzone
     {
@@ -115,7 +115,7 @@ public class Joystick : MonoBehaviour, IPointerDownHandler, IDragHandler, IPoint
     }
     protected virtual void Start()
     {
-        HandleRange = handlerRange;
+        HandleRange = handleRange;
         Deadzone = deadZone;
         baseRect = GetComponent<RectTransform>();
         canvas = GetComponentInParent<Canvas>();
@@ -140,15 +140,15 @@ public class Joystick : MonoBehaviour, IPointerDownHandler, IDragHandler, IPoint
 
         FormatInput();
         HandleInput(input.magnitude, input.normalized, radius, cam);
-        handle.anchoredPosition = input * radius * handlerRange;
+        handle.anchoredPosition = input * radius * handleRange;
     }
 
-    public void OnPointerDown(PointerEventData eventData)
+    public virtual void OnPointerDown(PointerEventData eventData)
     {
         OnDrag(eventData);
     }
 
-    public void OnPointerUp(PointerEventData eventData)
+    public virtual void OnPointerUp(PointerEventData eventData)
     {
         input = Vector2.zero;
         handle.anchoredPosition = Vector2.zero;
